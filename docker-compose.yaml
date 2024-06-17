@@ -1,0 +1,19 @@
+networks:
+  dev:
+    driver: bridge
+
+services:
+  ibbi-db:
+    container_name: ibbi-db
+    build:
+      dockerfile: Dockerfile.db
+    ports:
+      - "5464:5432"
+    restart: always
+    volumes:
+      - app_data:/var/lib/postgresql/data
+    networks:
+      - dev
+
+volumes:
+  app_data:
