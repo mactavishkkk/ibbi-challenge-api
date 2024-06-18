@@ -1,15 +1,16 @@
 from sqlalchemy.orm import Session
-
 import sys
 import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-import models
+import models, utils
 
 def seed_users(db: Session):
-    user = models.User(email="ionet@example.com", password="password")
-    user1 = models.User(email="maraiza@example.com", password="password")
-    user2 = models.User(email="greyce@example.com", password="password")
+    hashed_password = utils.get_password_hash("passowrd");
+
+    user = models.User(email="ionet@example.com", password=hashed_password)
+    user1 = models.User(email="maraiza@example.com", password=hashed_password)
+    user2 = models.User(email="greyce@example.com", password=hashed_password)
 
     db.add(user)
     db.add(user1)
