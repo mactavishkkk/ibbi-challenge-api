@@ -41,11 +41,11 @@ docker compose up -d
 6. Pronto, agora você já poderá acessar a rota de boas vindas em seu navegador:
 
 ```bash
-https://localhost:3001/
+https://localhost:8001/
 ```
 
 ---
 
 ## Documentação da API
 
-A documentação da API pode ser encontrada em `http://localhost:3001/swagger/api`, onde você pode encontrar informações sobre os endpoints disponíveis, parâmetros de solicitação, respostas e exemplos de uso.
+A documentação da API pode ser encontrada em `http://localhost:8001/docs`, onde você pode encontrar informações sobre os endpoints disponíveis, parâmetros de solicitação, respostas e exemplos de uso.

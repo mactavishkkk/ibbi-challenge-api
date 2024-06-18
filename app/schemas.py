@@ -20,6 +20,9 @@ class CategoryBase(BaseModel):
 class CategoryCreate(CategoryBase):
     pass
 
+class CategoryUpdate(CategoryBase):
+    pass
+
 class Category(CategoryBase):
     id: int
 
@@ -37,6 +40,9 @@ class ProductBase(BaseModel):
     category_id: int
 
 class ProductCreate(ProductBase):
+    pass
+
+class ProductUpdate(ProductBase):
     pass
 
 class Product(ProductBase):
