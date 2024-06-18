@@ -6,7 +6,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import models, utils
 
 def seed_users(db: Session):
-    hashed_password = utils.get_password_hash("passowrd");
+    hashed_password = utils.get_password_hash("password");
 
     user = models.User(email="ionet@example.com", password=hashed_password)
     user1 = models.User(email="maraiza@example.com", password=hashed_password)
