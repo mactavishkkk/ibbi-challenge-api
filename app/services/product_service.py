@@ -1,17 +1,52 @@
 from sqlalchemy.orm import Session
+from typing import Optional
+from fastapi import UploadFile
 import sys, os
+import hashlib
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import models, schemas
 
-def get_products(db: Session, skip: int = 0, limit: int = 10):
-    return db.query(models.Product).offset(skip).limit(limit).all()
+UPLOAD_DIR = 'app/uploads/images'
+
+if not os.path.exists(UPLOAD_DIR):
+    os.makedirs(UPLOAD_DIR)
+
+def get_products(db: Session, skip: int = 0, limit: int = 10, category_id: Optional[int] = None, description: Optional[str] = None):
+    query = db.query(models.Product)
+
+    if category_id is not None:
+        query = query.filter(models.Product.category_id == category_id)
+
+    if description is not None:
+        query = query.filter(models.Product.description.ilike(f'%{description}%'))
+
+    return query.offset(skip).limit(limit).all()
 
 def get_product_by_id(db: Session, product_id: int):
     return db.query(models.Product).filter(models.Product.id == product_id).first()
 
-def create_product(db: Session, product: schemas.ProductCreate):
-    product = models.Product(**product.dict())
+def create_product(db: Session, product: schemas.ProductCreate, file: Optional[UploadFile] = None):
+    image_hash = None
+    
+    if file:
+        content = file.file.read()
+        image_hash = hashlib.sha256(content).hexdigest()
+        file_path = os.path.join(UPLOAD_DIR, image_hash)
+        os.makedirs(UPLOAD_DIR, exist_ok=True)
+        with open(file_path, "wb") as image_file:
+            image_file.write(content)
+
+    product = models.Product(
+        name=product.name,
+        description=product.description,
+        value=product.value,
+        dolarValue=product.dolarValue,
+        image=image_hash,
+        quantity=product.quantity,
+        status=product.status,
+        category_id=product.category_id
+    )
 
     db.add(product)
     db.commit()
