@@ -3,6 +3,19 @@ networks:
     driver: bridge
 
 services:
+  app:
+    build:
+      context: ./app
+      dockerfile: ../Dockerfile
+    ports:
+      - "8001:8000"
+    depends_on:
+      - ibbi-db
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@192.168.1.2:5464/ibbidb
+    networks:
+      - dev
+
   ibbi-db:
     container_name: ibbi-db
     build:

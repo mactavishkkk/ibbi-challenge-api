@@ -1,9 +1,10 @@
 from fastapi import FastAPI
-from .routers import users, categories, products
-from app import auth
-from .database import engine, Base
+import sys, os
 
-Base.metadata.create_all(bind=engine)
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
+import routers.users as ru, routers.categories as rc, routers.products as rp, auth, database
+
+database.Base.metadata.create_all(bind=database.engine)
 
 app = FastAPI()
 
@@ -12,6 +13,6 @@ def helloworldd():
     return {"message": "Hello, world!"}
 
 app.include_router(auth.router);
-app.include_router(users.router, prefix="/users", tags=["users"])
-app.include_router(categories.router, prefix="/categories", tags=["categories"])
-app.include_router(products.router, prefix="/products", tags=["products"])
+app.include_router(ru.router, prefix="/users", tags=["users"])
+app.include_router(rc.router, prefix="/categories", tags=["categories"])
+app.include_router(rp.router, prefix="/products", tags=["products"])

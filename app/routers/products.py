@@ -2,13 +2,12 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from typing import Optional
-from .. import schemas, database
 from auth import get_current_user
 
 import sys, os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-import services.product_service as product_service
+import services.product_service as product_service, schemas, database
 
 router = APIRouter()
 UPLOAD_DIR = "app/uploads/images"
