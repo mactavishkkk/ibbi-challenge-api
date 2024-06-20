@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import sys, os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
@@ -7,6 +8,19 @@ import routers.users as ru, routers.categories as rc, routers.products as rp, au
 database.Base.metadata.create_all(bind=database.engine)
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:4200",
+    "http://localhost:4201",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get('/')
 def helloworldd():
