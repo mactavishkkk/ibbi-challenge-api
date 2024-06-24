@@ -13,7 +13,7 @@ DEFAULT_IMAGE_PATH = 'app/assets/product-default-image.png'
 if not os.path.exists(UPLOAD_DIR):
     os.makedirs(UPLOAD_DIR)
 
-def get_products(db: Session, skip: int = 0, limit: int = 10, category_id: Optional[int] = None, description: Optional[str] = None):
+def get_products(db: Session, skip: int = 0, limit: int = 50, category_id: Optional[int] = None, description: Optional[str] = None):
     query = db.query(models.Product)
 
     if category_id is not None:
