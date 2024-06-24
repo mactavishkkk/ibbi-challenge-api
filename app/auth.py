@@ -66,7 +66,7 @@ async def login_for_acess_token(form_data: CreateUserRequest, db: db_dependency)
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Could not validate user.')
     
-    access_token_expires = timedelta(minutes=60)
+    access_token_expires = timedelta(minutes=180)
     token = create_access_token(
         data={"sub": user.email, "id": user.id}, expires_delta=access_token_expires
     )

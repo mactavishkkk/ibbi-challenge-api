@@ -8,6 +8,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import models, schemas
 
 UPLOAD_DIR = 'app/uploads/images'
+DEFAULT_IMAGE_PATH = 'app/assets/product-default-image.png'
 
 if not os.path.exists(UPLOAD_DIR):
     os.makedirs(UPLOAD_DIR)
@@ -36,6 +37,15 @@ def create_product(db: Session, product: schemas.ProductCreate, file: Optional[U
         os.makedirs(UPLOAD_DIR, exist_ok=True)
         with open(file_path, "wb") as image_file:
             image_file.write(content)
+    else:
+        with open(DEFAULT_IMAGE_PATH, "rb") as default_image_file:
+            default_image_content = default_image_file.read()
+            image_hash = hashlib.sha256(default_image_content).hexdigest()
+            file_path = os.path.join(UPLOAD_DIR, image_hash)
+            with open(file_path, "wb") as image_file:
+                image_file.write(default_image_content)
+
+    status = calculate_status(product.quantity)
 
     product = models.Product(
         name=product.name,
@@ -44,7 +54,7 @@ def create_product(db: Session, product: schemas.ProductCreate, file: Optional[U
         dolarValue=product.dolarValue,
         image=image_hash,
         quantity=product.quantity,
-        status=product.status,
+        status=status,
         category_id=product.category_id
     )
 
@@ -79,3 +89,13 @@ def delete_product(db: Session, product_id: int):
         db.commit()
         
     return product
+
+def calculate_status(quantity: int) -> str:
+    suggested_quantity = 10
+
+    if quantity < suggested_quantity:
+        return "red"
+    elif quantity - suggested_quantity <= 5:
+        return "yellow"
+    else:
+        return "green"
